@@ -1,8 +1,9 @@
-/* =========================
+/* ==================================================
    비밀번호
-========================= */
+================================================== */
 
 const PASSWORD = "2049";
+
 
 const passwordScreen =
     document.getElementById("passwordScreen");
@@ -13,9 +14,8 @@ const passwordInput =
 const passwordButton =
     document.getElementById("passwordButton");
 
-const passwordError =
-    document.getElementById("passwordError");
 
+/* 비밀번호 확인 */
 
 function checkPassword() {
 
@@ -23,16 +23,29 @@ function checkPassword() {
 
         passwordScreen.style.display = "none";
 
+        passwordInput.value = "";
+
     } else {
 
-        passwordError.textContent =
-            "❌ WRONG PASSWORD";
+        passwordInput.classList.remove("wrong");
+
+        /*
+            애니메이션을 다시 실행하기 위해
+            잠깐 화면을 다시 계산
+        */
+
+        void passwordInput.offsetWidth;
+
+        passwordInput.classList.add("wrong");
 
         passwordInput.value = "";
+
         passwordInput.focus();
     }
 }
 
+
+/* ENTER 버튼 */
 
 passwordButton.addEventListener(
     "click",
@@ -40,47 +53,82 @@ passwordButton.addEventListener(
 );
 
 
+/* 키보드 Enter */
+
 passwordInput.addEventListener(
     "keydown",
     function (event) {
 
         if (event.key === "Enter") {
+
             checkPassword();
+
         }
 
     }
 );
 
-const hoursInput = document.getElementById("hours");
-const minutesInput = document.getElementById("minutes");
-const secondsInput = document.getElementById("seconds");
 
-const startButton = document.getElementById("start");
-const pauseButton = document.getElementById("pause");
-const resetButton = document.getElementById("reset");
+/* ==================================================
+   HTML 요소 가져오기
+================================================== */
 
-const statusText = document.getElementById("status");
+const hoursInput =
+    document.getElementById("hours");
 
-const finishEffect = document.getElementById("finishEffect");
+const minutesInput =
+    document.getElementById("minutes");
+
+const secondsInput =
+    document.getElementById("seconds");
 
 
-/* =========================
+const startButton =
+    document.getElementById("start");
+
+const pauseButton =
+    document.getElementById("pause");
+
+const resetButton =
+    document.getElementById("reset");
+
+
+const statusText =
+    document.getElementById("status");
+
+
+const finishEffect =
+    document.getElementById("finishEffect");
+
+
+/* ==================================================
    위 / 아래 버튼
-========================= */
+================================================== */
 
-const hourUp = document.getElementById("hourUp");
-const hourDown = document.getElementById("hourDown");
+const hourUp =
+    document.getElementById("hourUp");
 
-const minuteUp = document.getElementById("minuteUp");
-const minuteDown = document.getElementById("minuteDown");
-
-const secondUp = document.getElementById("secondUp");
-const secondDown = document.getElementById("secondDown");
+const hourDown =
+    document.getElementById("hourDown");
 
 
-/* =========================
+const minuteUp =
+    document.getElementById("minuteUp");
+
+const minuteDown =
+    document.getElementById("minuteDown");
+
+
+const secondUp =
+    document.getElementById("secondUp");
+
+const secondDown =
+    document.getElementById("secondDown");
+
+
+/* ==================================================
    타이머 변수
-========================= */
+================================================== */
 
 let timer = null;
 
@@ -91,9 +139,18 @@ let savedSeconds = 0;
 let running = false;
 
 
-/* =========================
-   숫자를 0~범위로 제한
-========================= */
+/* ==================================================
+   알람 변수
+================================================== */
+
+let alarmTimer = null;
+
+let audioContext = null;
+
+
+/* ==================================================
+   숫자를 범위 안으로 제한
+================================================== */
 
 function clamp(value, min, max) {
 
@@ -101,13 +158,12 @@ function clamp(value, min, max) {
         Math.max(value, min),
         max
     );
-
 }
 
 
-/* =========================
+/* ==================================================
    입력값 정리
-========================= */
+================================================== */
 
 function cleanInputs() {
 
@@ -118,12 +174,14 @@ function cleanInputs() {
             99
         );
 
+
     let minutes =
         clamp(
             Number(minutesInput.value) || 0,
             0,
             59
         );
+
 
     let seconds =
         clamp(
@@ -136,42 +194,44 @@ function cleanInputs() {
     hoursInput.value =
         String(hours).padStart(2, "0");
 
+
     minutesInput.value =
         String(minutes).padStart(2, "0");
+
 
     secondsInput.value =
         String(seconds).padStart(2, "0");
 
 
     return {
+
         hours,
         minutes,
         seconds
-    };
 
+    };
 }
 
 
-/* =========================
-   입력된 시간을 초로 변환
-========================= */
+/* ==================================================
+   입력한 시간을 초로 변환
+================================================== */
 
 function getInputSeconds() {
 
-    const time = cleanInputs();
+    const time =
+        cleanInputs();
 
 
     /*
-        예:
-
         00 : 00 : 10
-        = 10초
+        → 10초
 
         00 : 10 : 00
-        = 600초
+        → 600초
 
         01 : 00 : 00
-        = 3600초
+        → 3600초
     */
 
     return (
@@ -179,18 +239,19 @@ function getInputSeconds() {
         time.minutes * 60 +
         time.seconds
     );
-
 }
 
 
-/* =========================
+/* ==================================================
    타이머 화면 표시
-========================= */
+================================================== */
 
 function displayTime() {
 
     const hours =
-        Math.floor(totalSeconds / 3600);
+        Math.floor(
+            totalSeconds / 3600
+        );
 
 
     const minutes =
@@ -213,44 +274,59 @@ function displayTime() {
 
     secondsInput.value =
         String(seconds).padStart(2, "0");
-
 }
 
 
-/* =========================
+/* ==================================================
    입력창 잠금
-========================= */
+================================================== */
 
 function setInputsDisabled(disabled) {
 
-    hoursInput.disabled = disabled;
+    hoursInput.disabled =
+        disabled;
 
-    minutesInput.disabled = disabled;
+    minutesInput.disabled =
+        disabled;
 
-    secondsInput.disabled = disabled;
+    secondsInput.disabled =
+        disabled;
 
-    hourUp.disabled = disabled;
 
-    hourDown.disabled = disabled;
+    hourUp.disabled =
+        disabled;
 
-    minuteUp.disabled = disabled;
+    hourDown.disabled =
+        disabled;
 
-    minuteDown.disabled = disabled;
 
-    secondUp.disabled = disabled;
+    minuteUp.disabled =
+        disabled;
 
-    secondDown.disabled = disabled;
+    minuteDown.disabled =
+        disabled;
 
+
+    secondUp.disabled =
+        disabled;
+
+    secondDown.disabled =
+        disabled;
 }
 
 
-/* =========================
-   숫자 변경 함수
-========================= */
+/* ==================================================
+   시간 ▲ ▼ 변경
+================================================== */
 
-function changeInput(input, amount, max) {
+function changeInput(
+    input,
+    amount,
+    max
+) {
 
     if (running) {
+
         return;
     }
 
@@ -263,12 +339,16 @@ function changeInput(input, amount, max) {
 
 
     if (value > max) {
+
         value = 0;
+
     }
 
 
     if (value < 0) {
+
         value = max;
+
     }
 
 
@@ -276,74 +356,124 @@ function changeInput(input, amount, max) {
         String(value).padStart(2, "0");
 
 
-    finishEffect.classList.remove("show");
+    finishEffect.classList.remove(
+        "show"
+    );
 
-    statusText.textContent = "READY";
 
+    statusText.textContent =
+        "READY";
 }
 
 
-/* =========================
-   시간 ▲ ▼
-========================= */
+/* ==================================================
+   시간 ▲ ▼ 이벤트
+================================================== */
 
-hourUp.addEventListener("click", function () {
+hourUp.addEventListener(
+    "click",
+    function () {
 
-    changeInput(hoursInput, 1, 99);
+        changeInput(
+            hoursInput,
+            1,
+            99
+        );
 
-});
-
-
-hourDown.addEventListener("click", function () {
-
-    changeInput(hoursInput, -1, 99);
-
-});
-
-
-minuteUp.addEventListener("click", function () {
-
-    changeInput(minutesInput, 1, 59);
-
-});
+    }
+);
 
 
-minuteDown.addEventListener("click", function () {
+hourDown.addEventListener(
+    "click",
+    function () {
 
-    changeInput(minutesInput, -1, 59);
+        changeInput(
+            hoursInput,
+            -1,
+            99
+        );
 
-});
-
-
-secondUp.addEventListener("click", function () {
-
-    changeInput(secondsInput, 1, 59);
-
-});
-
-
-secondDown.addEventListener("click", function () {
-
-    changeInput(secondsInput, -1, 59);
-
-});
+    }
+);
 
 
-/* =========================
+minuteUp.addEventListener(
+    "click",
+    function () {
+
+        changeInput(
+            minutesInput,
+            1,
+            59
+        );
+
+    }
+);
+
+
+minuteDown.addEventListener(
+    "click",
+    function () {
+
+        changeInput(
+            minutesInput,
+            -1,
+            59
+        );
+
+    }
+);
+
+
+secondUp.addEventListener(
+    "click",
+    function () {
+
+        changeInput(
+            secondsInput,
+            1,
+            59
+        );
+
+    }
+);
+
+
+secondDown.addEventListener(
+    "click",
+    function () {
+
+        changeInput(
+            secondsInput,
+            -1,
+            59
+        );
+
+    }
+);
+
+
+/* ==================================================
    직접 숫자 입력
-========================= */
+================================================== */
 
-function limitTwoDigits(input, max) {
+function limitTwoDigits(
+    input,
+    max
+) {
 
     let value =
-        input.value.replace(/\D/g, "");
+        input.value.replace(
+            /\D/g,
+            ""
+        );
 
 
     if (value.length > 2) {
 
         value =
             value.slice(0, 2);
-
     }
 
 
@@ -352,71 +482,104 @@ function limitTwoDigits(input, max) {
 
 
     number =
-        clamp(number, 0, max);
+        clamp(
+            number,
+            0,
+            max
+        );
 
 
     input.value =
         String(number).padStart(2, "0");
-
 }
 
 
-/* 시간 */
+hoursInput.addEventListener(
+    "input",
+    function () {
 
-hoursInput.addEventListener("input", function () {
+        limitTwoDigits(
+            hoursInput,
+            99
+        );
 
-    limitTwoDigits(hoursInput, 99);
-
-});
-
-
-/* 분 */
-
-minutesInput.addEventListener("input", function () {
-
-    limitTwoDigits(minutesInput, 59);
-
-});
+    }
+);
 
 
-/* 초 */
+minutesInput.addEventListener(
+    "input",
+    function () {
 
-secondsInput.addEventListener("input", function () {
+        limitTwoDigits(
+            minutesInput,
+            59
+        );
 
-    limitTwoDigits(secondsInput, 59);
-
-});
-
-
-/* 입력을 바꾼 경우 */
-
-[hoursInput, minutesInput, secondsInput]
-.forEach(function (input) {
-
-    input.addEventListener("change", function () {
-
-        if (running) {
-            return;
-        }
-
-        cleanInputs();
-
-        totalSeconds = 0;
-
-        savedSeconds = 0;
-
-        statusText.textContent = "READY";
-
-        finishEffect.classList.remove("show");
-
-    });
-
-});
+    }
+);
 
 
-/* =========================
+secondsInput.addEventListener(
+    "input",
+    function () {
+
+        limitTwoDigits(
+            secondsInput,
+            59
+        );
+
+    }
+);
+
+
+/* ==================================================
+   입력값 변경
+================================================== */
+
+[
+    hoursInput,
+    minutesInput,
+    secondsInput
+].forEach(
+    function (input) {
+
+        input.addEventListener(
+            "change",
+            function () {
+
+                if (running) {
+
+                    return;
+                }
+
+
+                cleanInputs();
+
+
+                totalSeconds = 0;
+
+                savedSeconds = 0;
+
+
+                statusText.textContent =
+                    "READY";
+
+
+                finishEffect.classList.remove(
+                    "show"
+                );
+
+            }
+        );
+
+    }
+);
+
+
+/* ==================================================
    종료 효과음
-========================= */
+================================================== */
 
 function playEndSound() {
 
@@ -426,287 +589,461 @@ function playEndSound() {
 
 
     if (!AudioContext) {
+
         return;
     }
 
 
-    const audioContext =
-        new AudioContext();
+    /*
+        AudioContext를 한 번만 생성
+    */
+
+    if (!audioContext) {
+
+        audioContext =
+            new AudioContext();
+    }
 
 
     /*
-        게임 느낌의 짧은 효과음
+        브라우저가 AudioContext를
+        일시정지한 경우 다시 시작
+    */
+
+    if (
+        audioContext.state ===
+        "suspended"
+    ) {
+
+        audioContext.resume();
+    }
+
+
+    /*
+        마인크래프트 느낌의
+        짧은 알림음
     */
 
     const notes = [
+
         660,
         660,
         880,
         660,
         990
+
     ];
 
 
-    notes.forEach(function (frequency, index) {
+    notes.forEach(
+        function (
+            frequency,
+            index
+        ) {
 
-        const oscillator =
-            audioContext.createOscillator();
-
-
-        const gain =
-            audioContext.createGain();
-
-
-        oscillator.type = "square";
-
-        oscillator.frequency.value =
-            frequency;
+            const oscillator =
+                audioContext.createOscillator();
 
 
-        const startTime =
-            audioContext.currentTime +
-            index * 0.18;
+            const gain =
+                audioContext.createGain();
 
 
-        gain.gain.setValueAtTime(
-            0.001,
-            startTime
-        );
+            oscillator.type =
+                "square";
 
 
-        gain.gain.exponentialRampToValueAtTime(
-            0.18,
-            startTime + 0.02
-        );
+            oscillator.frequency.value =
+                frequency;
 
 
-        gain.gain.exponentialRampToValueAtTime(
-            0.001,
-            startTime + 0.15
-        );
+            const startTime =
+                audioContext.currentTime +
+                index * 0.18;
 
 
-        oscillator.connect(gain);
+            gain.gain.setValueAtTime(
+                0.001,
+                startTime
+            );
 
-        gain.connect(
-            audioContext.destination
-        );
+
+            gain.gain.exponentialRampToValueAtTime(
+                0.18,
+                startTime + 0.02
+            );
 
 
-        oscillator.start(startTime);
+            gain.gain.exponentialRampToValueAtTime(
+                0.001,
+                startTime + 0.15
+            );
 
-        oscillator.stop(
-            startTime + 0.16
-        );
 
-    });
+            oscillator.connect(gain);
 
+
+            gain.connect(
+                audioContext.destination
+            );
+
+
+            oscillator.start(
+                startTime
+            );
+
+
+            oscillator.stop(
+                startTime + 0.16
+            );
+
+        }
+    );
 }
 
 
-/* =========================
-   START
-========================= */
+/* ==================================================
+   알람 무한 반복 시작
+================================================== */
 
-startButton.addEventListener("click", function () {
+function startAlarm() {
 
     /*
-        이미 실행 중이면 아무것도 하지 않음
+        이미 알람이 실행 중이면
+        중복으로 실행하지 않음
     */
 
-    if (timer !== null) {
+    if (alarmTimer !== null) {
+
         return;
     }
 
 
     /*
-        처음 시작할 때
+        첫 번째 알람 즉시 재생
     */
 
-    if (!running) {
+    playEndSound();
+
+
+    /*
+        1초마다 반복
+    */
+
+    alarmTimer =
+        setInterval(
+            function () {
+
+                playEndSound();
+
+            },
+            1000
+        );
+}
+
+
+/* ==================================================
+   알람 정지
+================================================== */
+
+function stopAlarm() {
+
+    if (alarmTimer !== null) {
+
+        clearInterval(
+            alarmTimer
+        );
+
+        alarmTimer = null;
+    }
+}
+
+
+/* ==================================================
+   START
+================================================== */
+
+startButton.addEventListener(
+    "click",
+    function () {
+
 
         /*
-            현재 입력된 값을
-            정확하게 가져옴
+            이미 실행 중이면
+            중복 타이머 방지
         */
 
-        if (totalSeconds === 0) {
+        if (timer !== null) {
+
+            return;
+        }
+
+
+        /*
+            처음 START를 누른 경우
+        */
+
+        if (!running) {
+
+
+            /*
+                타이머가 0이면
+                입력값을 가져옴
+            */
+
+            if (totalSeconds === 0) {
+
+                totalSeconds =
+                    getInputSeconds();
+
+
+                savedSeconds =
+                    totalSeconds;
+            }
+
+        }
+
+
+        /*
+            시간이 0이면 시작하지 않음
+        */
+
+        if (totalSeconds <= 0) {
+
+            statusText.textContent =
+                "SET A TIME FIRST";
+
+            return;
+        }
+
+
+        /*
+            알람이 혹시 켜져 있다면
+            시작할 때 정지
+        */
+
+        stopAlarm();
+
+
+        finishEffect.classList.remove(
+            "show"
+        );
+
+
+        running = true;
+
+
+        setInputsDisabled(
+            true
+        );
+
+
+        statusText.textContent =
+            "RUNNING...";
+
+
+        /*
+            타이머 시작
+        */
+
+        timer =
+            setInterval(
+                function () {
+
+
+                    totalSeconds--;
+
+
+                    displayTime();
+
+
+                    /*
+                        00:00:00 도달
+                    */
+
+                    if (
+                        totalSeconds <= 0
+                    ) {
+
+
+                        clearInterval(
+                            timer
+                        );
+
+
+                        timer = null;
+
+
+                        running = false;
+
+
+                        totalSeconds = 0;
+
+
+                        displayTime();
+
+
+                        /*
+                            화면 종료 효과
+                        */
+
+                        finishEffect.classList.add(
+                            "show"
+                        );
+
+
+                        /*
+                            알람 무한 반복
+                        */
+
+                        startAlarm();
+
+
+                        /*
+                            상태
+                        */
+
+                        statusText.textContent =
+                            "⏰ TIME'S UP!";
+
+
+                        /*
+                            다시 시간 설정 가능
+                        */
+
+                        setInputsDisabled(
+                            false
+                        );
+
+                    }
+
+
+                },
+                1000
+            );
+
+    }
+);
+
+
+/* ==================================================
+   PAUSE
+================================================== */
+
+pauseButton.addEventListener(
+    "click",
+    function () {
+
+
+        /*
+            실행 중이 아니면
+            아무것도 하지 않음
+        */
+
+        if (timer === null) {
+
+            return;
+        }
+
+
+        clearInterval(
+            timer
+        );
+
+
+        timer = null;
+
+
+        running = false;
+
+
+        statusText.textContent =
+            "PAUSED";
+
+    }
+);
+
+
+/* ==================================================
+   RESET
+================================================== */
+
+resetButton.addEventListener(
+    "click",
+    function () {
+
+
+        /*
+            가장 먼저 알람 정지
+        */
+
+        stopAlarm();
+
+
+        /*
+            타이머 정지
+        */
+
+        clearInterval(
+            timer
+        );
+
+
+        timer = null;
+
+
+        running = false;
+
+
+        /*
+            종료 화면 제거
+        */
+
+        finishEffect.classList.remove(
+            "show"
+        );
+
+
+        /*
+            저장해둔 시간으로 복구
+        */
+
+        totalSeconds =
+            savedSeconds;
+
+
+        /*
+            저장된 시간이 없다면
+            현재 입력값을 사용
+        */
+
+        if (savedSeconds === 0) {
+
 
             totalSeconds =
                 getInputSeconds();
+
 
             savedSeconds =
                 totalSeconds;
 
         }
 
-    }
-
-
-    /*
-        시간이 0이면 실행하지 않음
-    */
-
-    if (totalSeconds <= 0) {
-
-        statusText.textContent =
-            "SET A TIME FIRST";
-
-        return;
-
-    }
-
-
-    running = true;
-
-    setInputsDisabled(true);
-
-    statusText.textContent =
-        "RUNNING...";
-
-
-    /*
-        1초마다 실행
-    */
-
-    timer = setInterval(function () {
-
-        totalSeconds--;
 
         displayTime();
 
 
         /*
-            00:00:00
+            입력 가능하게 변경
         */
 
-        if (totalSeconds <= 0) {
-
-            clearInterval(timer);
-
-            timer = null;
-
-            running = false;
-
-            totalSeconds = 0;
-
-            displayTime();
+        setInputsDisabled(
+            false
+        );
 
 
-            /*
-                종료 효과
-            */
-
-            finishEffect.classList.add("show");
-
-
-            /*
-                효과음
-            */
-
-            playEndSound();
-
-
-            /*
-                상태
-            */
-
-            statusText.textContent =
-                "⏰ TIME'S UP!";
-
-
-            /*
-                다시 설정 가능
-            */
-
-            setInputsDisabled(false);
-
-        }
-
-    }, 1000);
-
-});
-
-
-/* =========================
-   PAUSE
-========================= */
-
-pauseButton.addEventListener("click", function () {
-
-    if (timer === null) {
-        return;
-    }
-
-
-    clearInterval(timer);
-
-    timer = null;
-
-    running = false;
-
-
-    statusText.textContent =
-        "PAUSED";
-
-});
-
-
-/* =========================
-   RESET
-========================= */
-
-resetButton.addEventListener("click", function () {
-
-    /*
-        타이머 정지
-    */
-
-    clearInterval(timer);
-
-    timer = null;
-
-    running = false;
-
-
-    /*
-        종료 화면 제거
-    */
-
-    finishEffect.classList.remove("show");
-
-
-    /*
-        처음 설정했던 시간으로 복구
-    */
-
-    totalSeconds =
-        savedSeconds;
-
-
-    /*
-        아직 시작한 적 없다면
-        현재 입력값을 기준으로 저장
-    */
-
-    if (savedSeconds === 0) {
-
-        totalSeconds =
-            getInputSeconds();
-
-        savedSeconds =
-            totalSeconds;
+        statusText.textContent =
+            "READY";
 
     }
-
-
-    displayTime();
-
-
-    setInputsDisabled(false);
-
-
-    statusText.textContent =
-        "READY";
-
-});
+);
