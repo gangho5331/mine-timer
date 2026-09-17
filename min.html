@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mine Timer</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- 타이머 종료 효과 -->
+    <div id="finishEffect">
+        <div class="finish-message">
+            ⏰ 보석 손실!!
+        </div>
+    </div>
+
+
+    <main class="container">
+
+        <!-- 제목 -->
+        <h1>⛏ MINE TIMER</h1>
+
+
+        <!-- 타이머 설정창 -->
+        <section class="timer-box">
+
+            <div class="label">
+                SET TIMER
+            </div>
+
+
+            <!-- 시간 설정 -->
+            <div class="time-input">
+
+                <!-- 시간 -->
+                <div class="time-part">
+
+                    <span class="part-name">HOUR</span>
+
+                    <button class="arrow-button" id="hourUp">
+                        ▲
+                    </button>
+
+                    <input
+                        type="number"
+                        id="hours"
+                        min="0"
+                        max="99"
+                        maxlength="2"
+                        value="00"
+                    >
+
+                    <button class="arrow-button" id="hourDown">
+                        ▼
+                    </button>
+
+                </div>
+
+
+                <span class="colon">:</span>
+
+
+                <!-- 분 -->
+                <div class="time-part">
+
+                    <span class="part-name">MIN</span>
+
+                    <button class="arrow-button" id="minuteUp">
+                        ▲
+                    </button>
+
+                    <input
+                        type="number"
+                        id="minutes"
+                        min="0"
+                        max="59"
+                        maxlength="2"
+                        value="10"
+                    >
+
+                    <button class="arrow-button" id="minuteDown">
+                        ▼
+                    </button>
+
+                </div>
+
+
+                <span class="colon">:</span>
+
+
+                <!-- 초 -->
+                <div class="time-part">
+
+                    <span class="part-name">SEC</span>
+
+                    <button class="arrow-button" id="secondUp">
+                        ▲
+                    </button>
+
+                    <input
+                        type="number"
+                        id="seconds"
+                        min="0"
+                        max="59"
+                        maxlength="2"
+                        value="00"
+                    >
+
+                    <button class="arrow-button" id="secondDown">
+                        ▼
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- 상태 -->
+            <div id="status" class="status">
+                READY
+            </div>
+
+
+            <!-- 버튼 -->
+            <div class="buttons">
+
+                <button id="start" type="button">
+                    ▶ START
+                </button>
+
+                <button id="pause" type="button">
+                    Ⅱ PAUSE
+                </button>
+
+                <button id="reset" type="button">
+                    ↻ RESET
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
