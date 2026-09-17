@@ -1,4 +1,55 @@
+/* =========================
+   비밀번호
+========================= */
 
+const PASSWORD = "1234";
+
+const passwordScreen =
+    document.getElementById("passwordScreen");
+
+const passwordInput =
+    document.getElementById("passwordInput");
+
+const passwordButton =
+    document.getElementById("passwordButton");
+
+const passwordError =
+    document.getElementById("passwordError");
+
+
+function checkPassword() {
+
+    if (passwordInput.value === PASSWORD) {
+
+        passwordScreen.style.display = "none";
+
+    } else {
+
+        passwordError.textContent =
+            "❌ WRONG PASSWORD";
+
+        passwordInput.value = "";
+        passwordInput.focus();
+    }
+}
+
+
+passwordButton.addEventListener(
+    "click",
+    checkPassword
+);
+
+
+passwordInput.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key === "Enter") {
+            checkPassword();
+        }
+
+    }
+);
 
 const hoursInput = document.getElementById("hours");
 const minutesInput = document.getElementById("minutes");
