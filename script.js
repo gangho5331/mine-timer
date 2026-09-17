@@ -2,7 +2,7 @@
    비밀번호
 ========================= */
 
-const PASSWORD = "1234";
+const PASSWORD = "2049";
 
 const passwordScreen =
     document.getElementById("passwordScreen");
